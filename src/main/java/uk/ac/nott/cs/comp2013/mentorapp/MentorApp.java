@@ -1,13 +1,16 @@
 package uk.ac.nott.cs.comp2013.mentorapp;
 
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import uk.ac.nott.cs.comp2013.mentorapp.controller.LoginController;
-import uk.ac.nott.cs.comp2013.mentorapp.model.HashMapRepository;
-import uk.ac.nott.cs.comp2013.mentorapp.model.user.Administrator;
-import uk.ac.nott.cs.comp2013.mentorapp.model.user.Mentee;
-import uk.ac.nott.cs.comp2013.mentorapp.model.user.Mentor;
-import uk.ac.nott.cs.comp2013.mentorapp.view.*;
+import uk.ac.nott.cs.comp2013.mentorapp.controller.SupportRequestController;
+import uk.ac.nott.cs.comp2013.mentorapp.model.Repository;
+import uk.ac.nott.cs.comp2013.mentorapp.model.RepositoryFactory;
+import uk.ac.nott.cs.comp2013.mentorapp.model.user.User;
+import uk.ac.nott.cs.comp2013.mentorapp.view.AdminView;
+import uk.ac.nott.cs.comp2013.mentorapp.view.LoginView;
+import uk.ac.nott.cs.comp2013.mentorapp.view.ViewManager;
 
 public class MentorApp extends Application {
 
@@ -15,39 +18,34 @@ public class MentorApp extends Application {
     Application.launch(args);
   }
 
-  private LoginView createLoginView() {
+  private Repository<User, String> loadMockData() throws IOException {
+    RepositoryFactory builder = new RepositoryFactory();
+    return builder.userRepositoryFromCsv("/MOCK_DATA.csv");
+  }
 
-    HashMapRepository hashMapRepository = new HashMapRepository<>();
-    hashMapRepository.insert(new Mentor("mentor", "123"));
-    hashMapRepository.insert(new Mentee("mentee", "123"));
-    hashMapRepository.insert(new Administrator("admin", "123"));
-
-    LoginController controller = new LoginController(hashMapRepository);
+  private LoginView createLoginView(Repository<User, String> repo) {
+    LoginController controller = new LoginController(repo);
     return new LoginView(controller);
   }
 
-  private MentorView createMentorView() {
-    return new MentorView();
-  }
-
-  private MenteeView createMenteeView() {
-    return new MenteeView();
-  }
-
-  private AdministratorView createAdministratorView() {
-    return new AdministratorView();
+  private AdminView createAdminView(Repository<User, String> repo) {
+    SupportRequestController controller = new SupportRequestController(repo);
+    return new AdminView(controller);
   }
 
   @Override
   public void start(Stage stage) throws Exception {
-    ViewManager sm = new ViewManager(stage);
+    // add : set the size of stage
+    stage.setWidth(800);
+    stage.setHeight(600);
+//
+    Repository<User, String> mockData = loadMockData();
 
-    sm.addView(ViewManager.LOGIN, createLoginView());
-    sm.addView(ViewManager.MENTOR, createMentorView());
-    sm.addView(ViewManager.MENTEE, createMenteeView());
-    sm.addView(ViewManager.ADMIN, createAdministratorView());
+    ViewManager vm = new ViewManager(stage);
+    vm.addView(ViewManager.LOGIN, createLoginView(mockData));
+    vm.addView(ViewManager.ADMIN, createAdminView(mockData));
 
-    sm.setStageView(ViewManager.LOGIN);
+    vm.setStageView(ViewManager.LOGIN);
     stage.show();
   }
 }

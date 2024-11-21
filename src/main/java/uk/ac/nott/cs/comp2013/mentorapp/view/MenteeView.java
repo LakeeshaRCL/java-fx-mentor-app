@@ -1,5 +1,4 @@
 package uk.ac.nott.cs.comp2013.mentorapp.view;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
@@ -7,17 +6,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class MenteeView extends VBox implements ManagedView {
-
-
-    protected ObjectProperty<EventHandler<? super ViewChangeEvent>> onViewChange;
+    private final ObjectProperty<EventHandler<? super ViewChangeEvent>> onViewChange = new SimpleObjectProperty<>("onViewChange", null);
 
     public MenteeView() {
-        this.onViewChange = new SimpleObjectProperty<>("onViewChange", null);
-
-        Label label = new Label();
-        label.setText("Mentee View");
-
-        getChildren().addAll(label);
+        Label label = new Label("Mentee");
+        label.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        getChildren().add(label);
     }
 
     @Override
