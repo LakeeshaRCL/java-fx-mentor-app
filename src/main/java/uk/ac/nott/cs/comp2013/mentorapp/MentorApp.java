@@ -7,6 +7,7 @@ import uk.ac.nott.cs.comp2013.mentorapp.controller.LoginController;
 import uk.ac.nott.cs.comp2013.mentorapp.controller.SupportRequestController;
 import uk.ac.nott.cs.comp2013.mentorapp.model.Repository;
 import uk.ac.nott.cs.comp2013.mentorapp.model.RepositoryFactory;
+import uk.ac.nott.cs.comp2013.mentorapp.model.session.SupportSession;
 import uk.ac.nott.cs.comp2013.mentorapp.model.user.User;
 import uk.ac.nott.cs.comp2013.mentorapp.view.AdminView;
 import uk.ac.nott.cs.comp2013.mentorapp.view.LoginView;
@@ -35,8 +36,8 @@ public class MentorApp extends Application {
   }
 
 
-  private MenteeView createMenteeView(LoginController controller) {
-    return new MenteeView(controller);
+  private MenteeView createMenteeView(LoginController controller, SupportRequestController requestController) {
+    return new MenteeView(controller, requestController);
   }
 
   @Override
@@ -48,16 +49,17 @@ public class MentorApp extends Application {
     // dependencies
     ViewManager vm = new ViewManager(stage);
     Repository<User, String> mockData = loadMockData();
+    SupportSession supportSession = new SupportSession();
 
     // controllers
-    LoginController loginController = new LoginController(mockData,vm);
+    LoginController loginController = new LoginController(mockData, vm, supportSession);
     SupportRequestController supportRequestController = new SupportRequestController(mockData);
 
 
 
     vm.addView(ViewManager.LOGIN, createLoginView(loginController));
     vm.addView(ViewManager.ADMIN, createAdminView(supportRequestController));
-    vm.addView(ViewManager.MENTEE, createMenteeView(loginController));
+    vm.addView(ViewManager.MENTEE, createMenteeView(loginController, supportRequestController));
 
     vm.setStageView(ViewManager.LOGIN);
     stage.show();

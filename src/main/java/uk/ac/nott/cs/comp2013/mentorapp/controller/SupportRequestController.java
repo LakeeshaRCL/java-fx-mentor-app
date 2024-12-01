@@ -22,7 +22,7 @@ public class SupportRequestController {
         this.repo = model;
         this.supportRequestModel = new SupportRequestModel();
 
-        this.initializeData();
+        // this.initializeData();
     }
 
 
@@ -62,6 +62,11 @@ public class SupportRequestController {
 
     public String getSupportRequestType(int id){
         return this.supportRequestModel.getSupportRequestType(id);
+    }
+
+
+    public List<String> getSupportRequestTypes() {
+        return this.supportRequestModel.getSupportRequestTypes();
     }
 
 

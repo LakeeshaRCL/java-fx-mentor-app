@@ -2,6 +2,7 @@ package uk.ac.nott.cs.comp2013.mentorapp.controller;
 
 import java.util.Optional;
 import uk.ac.nott.cs.comp2013.mentorapp.model.Repository;
+import uk.ac.nott.cs.comp2013.mentorapp.model.session.SupportSession;
 import uk.ac.nott.cs.comp2013.mentorapp.model.user.User;
 import uk.ac.nott.cs.comp2013.mentorapp.view.LoginView;
 import uk.ac.nott.cs.comp2013.mentorapp.view.ViewChangeEvent;
@@ -12,10 +13,12 @@ public class LoginController {
 
   private final Repository<User, String> repo;
   private final ViewManager viewManager;
+  private SupportSession supportSession;
 
-  public LoginController(Repository<User, String> model, ViewManager viewManager) {
+  public LoginController(Repository<User, String> model, ViewManager viewManager, SupportSession supportSession) {
     this.repo = model;
     this.viewManager = viewManager;
+    this.supportSession = supportSession;
   }
 
   public void onLoginClick(String username, String password, ManagedView view) {
@@ -30,7 +33,10 @@ public class LoginController {
     User u = user.get();
 
     if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+
       String role = u.getRole().toString();
+      supportSession.setLoggedInUser(u); // set logged in user
+
       switch (role) {
         case "MENTEE":
           System.out.println("Mentee!!!!!!!!!");
