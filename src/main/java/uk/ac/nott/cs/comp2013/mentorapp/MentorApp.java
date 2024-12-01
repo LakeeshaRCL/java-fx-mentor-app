@@ -10,6 +10,7 @@ import uk.ac.nott.cs.comp2013.mentorapp.model.RepositoryFactory;
 import uk.ac.nott.cs.comp2013.mentorapp.model.user.User;
 import uk.ac.nott.cs.comp2013.mentorapp.view.AdminView;
 import uk.ac.nott.cs.comp2013.mentorapp.view.LoginView;
+import uk.ac.nott.cs.comp2013.mentorapp.view.MenteeView;
 import uk.ac.nott.cs.comp2013.mentorapp.view.ViewManager;
 
 public class MentorApp extends Application {
@@ -23,14 +24,19 @@ public class MentorApp extends Application {
     return builder.userRepositoryFromCsv("/MOCK_DATA.csv");
   }
 
-  private LoginView createLoginView(Repository<User, String> repo) {
-    LoginController controller = new LoginController(repo);
+  private LoginView createLoginView(LoginController controller) {
+
     return new LoginView(controller);
   }
 
-  private AdminView createAdminView(Repository<User, String> repo) {
-    SupportRequestController controller = new SupportRequestController(repo);
+  private AdminView createAdminView(SupportRequestController controller) {
+
     return new AdminView(controller);
+  }
+
+
+  private MenteeView createMenteeView(LoginController controller) {
+    return new MenteeView(controller);
   }
 
   @Override
@@ -38,12 +44,20 @@ public class MentorApp extends Application {
     // add : set the size of stage
     stage.setWidth(800);
     stage.setHeight(600);
-//
+
+    // dependencies
+    ViewManager vm = new ViewManager(stage);
     Repository<User, String> mockData = loadMockData();
 
-    ViewManager vm = new ViewManager(stage);
-    vm.addView(ViewManager.LOGIN, createLoginView(mockData));
-    vm.addView(ViewManager.ADMIN, createAdminView(mockData));
+    // controllers
+    LoginController loginController = new LoginController(mockData,vm);
+    SupportRequestController supportRequestController = new SupportRequestController(mockData);
+
+
+
+    vm.addView(ViewManager.LOGIN, createLoginView(loginController));
+    vm.addView(ViewManager.ADMIN, createAdminView(supportRequestController));
+    vm.addView(ViewManager.MENTEE, createMenteeView(loginController));
 
     vm.setStageView(ViewManager.LOGIN);
     stage.show();

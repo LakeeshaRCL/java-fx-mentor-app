@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -50,6 +51,13 @@ public class ViewManager {
   public void setStageView(String key) {
     if (!scenes.containsKey(key)) {
       return;
+    }
+
+
+    Scene old = stage.getScene();
+
+    if (old != null) {
+      old.setRoot(new StackPane());
     }
 
     Scene s = new Scene(scenes.get(key), 500, 400);

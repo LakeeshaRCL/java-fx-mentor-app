@@ -50,6 +50,8 @@ public class LoginView extends VBox implements ManagedView {
     // add:
     btnLogin.setOnAction(e -> {
       controller.onLoginClick(txtUsername.getText(), txtPassword.getText(), this);
+      txtPassword.setText("");
+      txtUsername.setText("");
     });
 //
 
