@@ -1,5 +1,6 @@
 package uk.ac.nott.cs.comp2013.mentorapp.controller;
 
+import javafx.collections.ObservableList;
 import uk.ac.nott.cs.comp2013.mentorapp.model.Repository;
 import uk.ac.nott.cs.comp2013.mentorapp.model.supportRequest.PairedSupportRequest;
 import uk.ac.nott.cs.comp2013.mentorapp.model.supportRequest.SupportRequestModel;
@@ -23,10 +24,11 @@ public class SupportRequestController {
         this.supportRequestModel = new SupportRequestModel();
 
         // this.initializeData();
+        this.initializeMentors();
     }
 
 
-    private void initializeData(){
+    private void initializeData() {
         Random rand = new Random();
         int maxRecords = 10;
         AtomicInteger currentRecord = new AtomicInteger(1);
@@ -34,9 +36,9 @@ public class SupportRequestController {
 
         // add support request types
         repo.selectAll().forEach(u -> {
-            if(u.getRole().toString().equals("MENTEE")){
+            if (u.getRole().toString().equals("MENTEE")) {
 
-                if(currentRecord.get() <= maxRecords){
+                if (currentRecord.get() <= maxRecords) {
                     Mentee mentee = (Mentee) u;
 
                     int randomIndex = rand.nextInt(0, 3);
@@ -49,18 +51,20 @@ public class SupportRequestController {
             }
         });
 
-
-        // add mentors
-        String[] mentorNames = {"Julia", "Ian", "Sue", "Matthew","Hannah", "Stephan", "Denise"};
-
-        for (String mentorName : mentorNames) {
-            this.supportRequestModel.addMentor(new Mentor(mentorName, "pw"));
-        }
     }
 
 
+    private void initializeMentors() {
+        repo.selectAll().forEach(u -> {
+            if (u.getRole().toString().equals("MENTOR")) {
+                Mentor mentor = (Mentor) u;
+                this.supportRequestModel.addMentor(mentor);
+            }
+        });
+    }
 
-    public String getSupportRequestType(int id){
+
+    public String getSupportRequestType(int id) {
         return this.supportRequestModel.getSupportRequestType(id);
     }
 
@@ -74,7 +78,7 @@ public class SupportRequestController {
         this.supportRequestModel.addPendingSupportRequest(mentee, supportRequestType);
     }
 
-    public List<String> getPendingSupportRequests(){
+    public List<String> getPendingSupportRequests() {
         List<String> supportRequests = new ArrayList<String>();
 
         this.supportRequestModel.getPendingSupportRequests()
@@ -84,20 +88,20 @@ public class SupportRequestController {
     }
 
 
-    public List<String> getPairedSupportRequests(){
+    public List<String> getPairedSupportRequests() {
         List<String> pairedSupportRequests = new ArrayList<>();
 
-        this.supportRequestModel.getPairedSupportRequests().forEach( psr -> pairedSupportRequests
+        this.supportRequestModel.getPairedSupportRequests().forEach(psr -> pairedSupportRequests
                 .add(psr.getPairedRequestDisplayName()));
 
         return pairedSupportRequests;
     }
 
 
-    public void addPairedSupportRequest(String mentorName, String menteeSupportRequest){
+    public void addPairedSupportRequest(String mentorName, String menteeSupportRequest) {
         String[] menteeSrSplit = menteeSupportRequest.split(" by ");
 
-        System.out.println("Split mentee sr : "+ Arrays.toString(menteeSrSplit));
+        System.out.println("Split mentee sr : " + Arrays.toString(menteeSrSplit));
 
         PairedSupportRequest pairedSupportRequest =
                 new PairedSupportRequest(this.supportRequestModel.getMentor(mentorName), this.supportRequestModel.
@@ -105,11 +109,11 @@ public class SupportRequestController {
         this.supportRequestModel.addPairedSupportRequest(pairedSupportRequest);
     }
 
-    public List<String> getMentors(){
+    public List<String> getMentors() {
         return this.supportRequestModel.getMentorNames();
     }
 
-    public void removeMentor(String mentorName){
+    public void removeMentor(String mentorName) {
         this.supportRequestModel.removeMentor(mentorName);
     }
 

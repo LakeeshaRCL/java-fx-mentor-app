@@ -1,6 +1,7 @@
 package uk.ac.nott.cs.comp2013.mentorapp.controller;
 
 import java.util.Optional;
+
 import uk.ac.nott.cs.comp2013.mentorapp.model.Repository;
 import uk.ac.nott.cs.comp2013.mentorapp.model.session.SupportSession;
 import uk.ac.nott.cs.comp2013.mentorapp.model.user.User;
@@ -11,56 +12,57 @@ import uk.ac.nott.cs.comp2013.mentorapp.view.ViewManager;
 
 public class LoginController {
 
-  private final Repository<User, String> repo;
-  private final ViewManager viewManager;
-  private SupportSession supportSession;
+    private final Repository<User, String> repo;
+    private final ViewManager viewManager;
+    private SupportSession supportSession;
 
-  public LoginController(Repository<User, String> model, ViewManager viewManager, SupportSession supportSession) {
-    this.repo = model;
-    this.viewManager = viewManager;
-    this.supportSession = supportSession;
-  }
-
-  public void onLoginClick(String username, String password, ManagedView view) {
-
-    Optional<User> user = repo.selectById(username);
-
-    if (user.isEmpty()) {
-      ((LoginView) view).showError("Empty username or password!");
-      return ;
+    public LoginController(Repository<User, String> model, ViewManager viewManager, SupportSession supportSession) {
+        this.repo = model;
+        this.viewManager = viewManager;
+        this.supportSession = supportSession;
     }
 
-    User u = user.get();
+    public void onLoginClick(String username, String password, ManagedView view) {
 
-    if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+        Optional<User> user = repo.selectById(username);
 
-      String role = u.getRole().toString();
-      supportSession.setLoggedInUser(u); // set logged in user
+        if (user.isEmpty()) {
+            ((LoginView) view).showError("Empty username or password!");
+            return;
+        }
 
-      switch (role) {
-        case "MENTEE":
-          System.out.println("Mentee!!!!!!!!!");
-          view.getOnViewChange().handle(new ViewChangeEvent("mentee_view"));
-          break;
-        case "MENTOR":
-          System.out.println("Mentor!!!!!!!!!");
-          view.getOnViewChange().handle(new ViewChangeEvent("mentor_view"));
-          break;
-        case "ADMIN":
-          System.out.println("Admin!!!!!!!!!");
-          view.getOnViewChange().handle(new ViewChangeEvent("admin_view"));
-          break;
-        default:
-          ((LoginView) view).showError("User role not recognized!");
-          break;
-      }
+        User u = user.get();
 
-    } else {
-      ((LoginView) view).showError("Incorrect username or password!");
+        if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+
+            String role = u.getRole().toString();
+            supportSession.setLoggedInUser(u); // set logged in user
+
+            switch (role) {
+                case "MENTEE":
+                    System.out.println("Mentee!!!!!!!!!");
+                    viewManager.setStageView(ViewManager.MENTEE);
+                    break;
+                case "MENTOR":
+                    System.out.println("Mentor!!!!!!!!!");
+                    viewManager.setStageView(ViewManager.MENTOR);
+                    break;
+                case "ADMIN":
+                    System.out.println("Admin!!!!!!!!!");
+                    viewManager.setStageView(ViewManager.ADMIN);
+                    break;
+                default:
+                    ((LoginView) view).showError("User role not recognized!");
+                    break;
+            }
+
+        } else {
+            ((LoginView) view).showError("Incorrect username or password!");
+        }
     }
-  }
 
-  public void onLogoutClick() {
-    viewManager.setStageView("login_view");
-  }
+    public void onLogoutClick(String requestingView) {
+        viewManager.removeView(requestingView);
+        viewManager.setStageView(ViewManager.LOGIN);
+    }
 }

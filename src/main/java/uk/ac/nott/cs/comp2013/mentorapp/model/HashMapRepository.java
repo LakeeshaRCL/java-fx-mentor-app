@@ -13,41 +13,41 @@ import java.util.Optional;
  */
 public class HashMapRepository<T extends HasId<Id>, Id> implements Repository<T, Id> {
 
-  private final HashMap<Id, T> data = new HashMap<>();
+    private final HashMap<Id, T> data = new HashMap<>();
 
-  @Override
-  public List<T> selectAll() {
-    return new ArrayList<>(data.values());
-  }
-
-  @Override
-  public Optional<T> selectById(Id id) {
-    T value = data.get(id);
-    return value == null ? Optional.empty() : Optional.of(value);
-  }
-
-  @Override
-  public <S extends T> S insert(S entity) {
-    if (data.containsKey(entity.getId())) {
-      return null;
+    @Override
+    public List<T> selectAll() {
+        return new ArrayList<>(data.values());
     }
 
-    data.put(entity.getId(), entity);
-    return entity;
-  }
-
-  @Override
-  public <S extends T> S update(S entity) {
-    if (!data.containsKey(entity.getId())) {
-      return null;
+    @Override
+    public Optional<T> selectById(Id id) {
+        T value = data.get(id);
+        return value == null ? Optional.empty() : Optional.of(value);
     }
 
-    data.put(entity.getId(), entity);
-    return entity;
-  }
+    @Override
+    public <S extends T> S insert(S entity) {
+        if (data.containsKey(entity.getId())) {
+            return null;
+        }
 
-  @Override
-  public void delete(Id id) {
-    data.remove(id);
-  }
+        data.put(entity.getId(), entity);
+        return entity;
+    }
+
+    @Override
+    public <S extends T> S update(S entity) {
+        if (!data.containsKey(entity.getId())) {
+            return null;
+        }
+
+        data.put(entity.getId(), entity);
+        return entity;
+    }
+
+    @Override
+    public void delete(Id id) {
+        data.remove(id);
+    }
 }

@@ -21,8 +21,8 @@ public class PairedSupportRequest {
     }
 
     public String getPairedRequestDisplayName() {
-        return "Support request: " + this.menteeSupportRequest.getSupportRequestType()  +
-                " by "+ this.menteeSupportRequest.getMentee().getUsername() +
-                " allocated to the "+ this.mentor.getUsername() + " mentor";
+        return "Support request: " + this.menteeSupportRequest.getSupportRequestType() +
+                " by " + this.menteeSupportRequest.getMentee().getUsername() +
+                " allocated to the " + this.mentor.getUsername() + " mentor";
     }
 }

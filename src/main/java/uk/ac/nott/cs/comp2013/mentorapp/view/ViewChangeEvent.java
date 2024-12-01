@@ -8,19 +8,19 @@ import javafx.event.EventType;
  */
 public class ViewChangeEvent extends Event {
 
-  private String view;
+    private String view;
 
-  public ViewChangeEvent(String view) {
-    super(new EventType<>("ViewChange"));
-    this.view = view;
-  }
+    public ViewChangeEvent(String view) {
+        super(new EventType<>("ViewChange"));
+        this.view = view;
+    }
 
-  /**
-   * Get the key of the view to display.
-   *
-   * @return view key
-   */
-  public String getView() {
-    return view;
-  }
+    /**
+     * Get the key of the view to display.
+     *
+     * @return view key
+     */
+    public String getView() {
+        return view;
+    }
 }

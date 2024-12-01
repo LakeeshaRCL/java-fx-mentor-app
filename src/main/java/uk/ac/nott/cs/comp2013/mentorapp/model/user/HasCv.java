@@ -5,7 +5,7 @@ package uk.ac.nott.cs.comp2013.mentorapp.model.user;
  */
 public interface HasCv {
 
-  String getCvText();
+    String getCvText();
 
-  void setCvText(String text);
+    void setCvText(String text);
 }

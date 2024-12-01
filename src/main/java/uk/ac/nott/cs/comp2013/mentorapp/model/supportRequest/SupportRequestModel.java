@@ -19,7 +19,7 @@ public class SupportRequestModel {
     }
 
 
-    private void setInitialValues(){
+    private void setInitialValues() {
         // add support types
         this.supportRequestTypes.add("Exam support");
         this.supportRequestTypes.add("Coding support");
@@ -27,7 +27,7 @@ public class SupportRequestModel {
     }
 
 
-    public void addPendingSupportRequest(Mentee mentee, String supportRequestType){
+    public void addPendingSupportRequest(Mentee mentee, String supportRequestType) {
         this.pendingSupportRequests.add(new MenteeSupportRequest(mentee, supportRequestType));
     }
 
@@ -40,7 +40,7 @@ public class SupportRequestModel {
         return pairedSupportRequests;
     }
 
-    public void addPairedSupportRequest(PairedSupportRequest pairedSupportRequest){
+    public void addPairedSupportRequest(PairedSupportRequest pairedSupportRequest) {
         this.pairedSupportRequests.add(pairedSupportRequest);
     }
 
@@ -51,40 +51,39 @@ public class SupportRequestModel {
 
 
     public String getSupportRequestType(int i) {
-        try{
+        try {
             return supportRequestTypes.get(i);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return "";
         }
     }
 
 
-    public void addMentor(Mentor mentor){
+    public void addMentor(Mentor mentor) {
         this.mentors.add(mentor);
     }
 
-    public void removeMentor(String username){
+    public void removeMentor(String username) {
         this.mentors.removeIf(mentor -> mentor.getUsername().equals(username));
         System.out.println("Removing mentor: " + username);
         System.out.println("New list: " + this.getMentorNames().toString());
     }
 
 
-    public List<Mentor> getMentors(){
+    public List<Mentor> getMentors() {
         return this.mentors;
     }
 
-    public List<String> getMentorNames(){
+    public List<String> getMentorNames() {
         return this.mentors.stream().map(Mentor::getUsername).collect(Collectors.toList());
     }
 
-    public Mentor getMentor(String username){
+    public Mentor getMentor(String username) {
         return this.mentors.stream().filter(m -> m.getUsername().equals(username)).findFirst().orElse(null);
     }
 
-    public MenteeSupportRequest getMenteeSupportRequest(String username, String supportRequestType){
+    public MenteeSupportRequest getMenteeSupportRequest(String username, String supportRequestType) {
         return this.pendingSupportRequests.stream()
                 .filter(sr -> sr.getMentee().getUsername().equals(username) &&
                         sr.getSupportRequestType().equals(supportRequestType)).findFirst().orElse(null);

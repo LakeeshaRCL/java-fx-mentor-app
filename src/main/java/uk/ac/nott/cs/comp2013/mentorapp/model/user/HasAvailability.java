@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
  */
 public interface HasAvailability {
 
-  LocalDateTime getStartAvailability();
+    LocalDateTime getStartAvailability();
 
-  void setStartAvailability(LocalDateTime date);
+    void setStartAvailability(LocalDateTime date);
 
-  LocalDateTime getEndAvailability();
+    LocalDateTime getEndAvailability();
 
-  void setEndAvailability(LocalDateTime date);
+    void setEndAvailability(LocalDateTime date);
 }
